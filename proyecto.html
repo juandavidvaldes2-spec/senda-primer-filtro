@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Proyecto — SENDA Riviera Pacifica</title>
+<meta name="description" content="Tres residencias diseñadas por Operaa Studio en sintonía con la Riviera Pacífica." />
+
+<link rel="preload" href="Archivo-Regular.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="Arimo-Bold.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="proyecto-hero.jpg" as="image">
+
+<style>
+  @font-face {
+    font-family: 'Archivo';
+    src: url('Archivo-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Archivo';
+    src: url('Archivo-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Arimo';
+    src: url('Arimo-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'BodoniSansText';
+    src: url('BodoniSansText-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-display: swap;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --cream: #f4f1ea;
+    --cream-form: #efe5d8;
+    --beige: #cbc2b0;
+    --dark: #211609;
+    --card-gray: #3a3835;
+    --olive: #8a8452;
+    --olive-mid: #7c754c;
+    --olive-deep: #665e35;
+    --olive-darker: #3d3a1e;
+
+    --font-display: 'Archivo', system-ui, sans-serif;
+    --font-body: 'Arimo', system-ui, sans-serif;
+    --font-serif: 'BodoniSansText', Georgia, serif;
+  }
+
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--cream);
+    color: var(--dark);
+    line-height: 1.5;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(46px);
+    transition: opacity 1.3s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1.3s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal.d1 { transition-delay: 0.1s; }
+  .reveal.d2 { transition-delay: 0.2s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  }
+
+  /* ============ HEADER (claro) ============ */
+  .header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 26px 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--cream);
+    transition: padding 0.5s ease, box-shadow 0.5s ease;
+  }
+
+  .header.scrolled {
+    padding: 16px 64px;
+    box-shadow: 0 2px 24px rgba(33,22,9,0.12);
+  }
+
+  .header-logo { display: flex; align-items: center; }
+  .header-logo img { height: 27px; width: auto; }
+
+  .header-nav { display: flex; align-items: center; gap: 46px; }
+
+  .header-nav a {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2.4px;
+    color: var(--dark);
+    position: relative;
+  }
+
+  .header-nav a:not(.contact-btn)::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    bottom: -7px;
+    height: 1px;
+    background: var(--dark);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .header-nav a:not(.contact-btn):hover::after,
+  .header-nav a.active::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .contact-btn {
+    border: 1px solid var(--dark);
+    padding: 12px 26px;
+    border-radius: 999px;
+    transition: background 0.35s ease, color 0.35s ease;
+  }
+  .contact-btn:hover { background: var(--dark); color: var(--cream); }
+
+  /* ============ HERO ============ */
+  .hero {
+    position: relative;
+    margin-top: 79px;
+    height: calc(88vh - 79px);
+    min-height: 520px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('proyecto-hero.jpg');
+    background-size: cover;
+    background-position: center 70%;
+    transform: scale(1.1);
+    opacity: 0;
+    transition: transform 6.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.5s ease;
+    will-change: transform;
+  }
+  .hero-bg.loaded { transform: scale(1.02); opacity: 1; }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(33,22,9,0.1);
+    pointer-events: none;
+  }
+
+  .hero-btn {
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+    background: rgba(33,22,9,0.82);
+    color: var(--cream);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 3.2px;
+    padding: 8px;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: heroBtnIn 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+  }
+  @keyframes heroBtnIn { to { opacity: 1; transform: translateY(0); } }
+
+  .hero-btn .inner {
+    display: block;
+    border: 1px solid rgba(244,241,234,0.55);
+    padding: 16px 56px;
+  }
+
+  /* ============ INTRO 2 COLUMNAS ============ */
+  .intro {
+    background: var(--cream);
+    padding: 110px 64px;
+  }
+
+  .intro-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 70px;
+  }
+
+  .intro-grid p {
+    font-family: var(--font-body);
+    font-size: 15.5px;
+    line-height: 1.8;
+    color: var(--dark);
+    text-align: justify;
+  }
+
+  /* ============ TABS MODELOS ============ */
+  .models-tabs {
+    background: var(--cream);
+    padding: 0 64px 100px;
+  }
+
+  .tabs-row {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+
+  .tab-btn {
+    border: 1px solid var(--dark);
+    background: transparent;
+    padding: 26px 20px 22px;
+    text-align: center;
+    transition: background 0.35s ease, color 0.35s ease, transform 0.35s ease;
+    color: var(--dark);
+  }
+
+  .tab-btn .tab-name {
+    display: block;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 2.4px;
+    margin-bottom: 8px;
+  }
+
+  .tab-btn .tab-area {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    opacity: 0.75;
+  }
+
+  .tab-btn:hover { transform: translateY(-3px); }
+
+  .tab-btn.active {
+    background: var(--dark);
+    color: var(--cream);
+  }
+
+  /* ============ PANEL MODELO ============ */
+  .model-panel {
+    background: var(--cream-form);
+    padding: 100px 64px 90px;
+  }
+
+  .model-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .model-title {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 34px;
+    letter-spacing: 3px;
+    color: var(--dark);
+    margin-bottom: 50px;
+    transition: opacity 0.4s ease;
+  }
+
+  .model-plan {
+    position: relative;
+    margin-bottom: 60px;
+    min-height: 320px;
+  }
+
+  .model-plan img {
+    width: 100%;
+    height: auto;
+    transition: opacity 0.45s ease;
+  }
+
+  .model-specs {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 50px;
+  }
+
+  .specs-list {
+    list-style: none;
+    max-width: 720px;
+    transition: opacity 0.4s ease;
+  }
+
+  .specs-area {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 14.5px;
+    letter-spacing: 0.6px;
+    margin-bottom: 14px;
+    color: var(--dark);
+  }
+
+  .specs-list li {
+    font-family: var(--font-display);
+    font-size: 13.5px;
+    line-height: 1.85;
+    color: var(--dark);
+  }
+
+  .iso-badge {
+    flex-shrink: 0;
+    border: 1px solid var(--dark);
+    border-radius: 999px;
+    padding: 11px 34px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 2.4px;
+    color: var(--dark);
+    background: transparent;
+  }
+
+  .fading { opacity: 0 !important; }
+
+  /* ============ BANNER RIVIERA ============ */
+  .riviera {
+    background: var(--olive-mid);
+    padding: 90px 64px;
+    display: flex;
+    align-items: center;
+    gap: 50px;
+  }
+
+  .riviera-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: 44px;
+    line-height: 1.2;
+    color: var(--cream-form);
+    flex-shrink: 0;
+  }
+
+  .riviera-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(244,241,234,0.45);
+  }
+
+  .riviera-logo img { height: 30px; width: auto; opacity: 0.95; }
+
+  /* ============ FOOTER ============ */
+  .footer {
+    background: var(--olive-darker);
+    padding: 80px 64px 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-logo { display: flex; align-items: center; }
+  .footer-logo img { height: 36px; width: auto; }
+
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-end;
+  }
+
+  .footer-links a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-display);
+    font-size: 14.5px;
+    color: var(--cream);
+    transition: opacity 0.25s ease;
+  }
+  .footer-links a:hover { opacity: 0.7; }
+  .footer-links svg { width: 17px; height: 17px; fill: var(--cream); }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 960px) {
+    .header { padding: 18px 24px; }
+    .header.scrolled { padding: 12px 24px; }
+    .header-logo img { height: 18px; }
+    .header-nav { gap: 16px; }
+    .header-nav a { font-size: 10px; letter-spacing: 1.4px; }
+    .contact-btn { padding: 8px 14px; }
+
+    .hero { margin-top: 60px; height: 56vh; min-height: 380px; }
+    .hero-btn { font-size: 12px; letter-spacing: 2.2px; }
+    .hero-btn .inner { padding: 13px 30px; }
+
+    .intro { padding: 60px 24px; }
+    .intro-grid { grid-template-columns: 1fr; gap: 26px; }
+
+    .models-tabs { padding: 0 24px 60px; }
+    .tabs-row { grid-template-columns: 1fr; gap: 16px; }
+
+    .model-panel { padding: 60px 24px; }
+    .model-title { font-size: 24px; margin-bottom: 30px; }
+    .model-specs { flex-direction: column; align-items: flex-start; gap: 28px; }
+
+    .riviera { flex-direction: column; padding: 60px 24px; gap: 26px; text-align: center; }
+    .riviera-title { font-size: 30px; }
+    .riviera-line { width: 100%; }
+
+    .footer { flex-direction: column; gap: 34px; padding: 50px 24px; }
+    .footer-logo img { height: 26px; }
+    .footer-links { align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <a href="index.html" class="header-logo">
+      <img src="logo-olive.png" alt="SENDA" />
+    </a>
+    <nav class="header-nav">
+      <a href="index.html">UBICACIÓN</a>
+      <a href="proyecto.html" class="active">PROYECTO</a>
+      <a href="lifestyle.html">LIFESTYLE</a>
+      <a href="contacto.html" class="contact-btn">CONTACTANOS</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+    <span class="hero-btn"><span class="inner">PROYECTO</span></span>
+  </section>
+
+  <!-- INTRO -->
+  <section class="intro">
+    <div class="intro-grid">
+      <p class="reveal">Operaa Studio diseñó SENDA en sintonía con la Riviera Pacífica: una arquitectura informal, que responde al entorno y a su lenguaje. Cada casa se organiza en torno a sus patios interiores, con techos altos, aleros amplios y ventilación cruzada.</p>
+      <p class="reveal d1">Los patios separan los volúmenes sociales de los privados, y a la vez disuelven la frontera entre interior y exterior: el recorrido desde la llegada se interrumpe, se abre, se cierra.</p>
+    </div>
+  </section>
+
+  <!-- TABS -->
+  <section class="models-tabs">
+    <div class="tabs-row reveal">
+      <button class="tab-btn active" data-model="garden">
+        <span class="tab-name">THE GARDEN RESIDENCE</span>
+        <span class="tab-area">652.56 M²</span>
+      </button>
+      <button class="tab-btn" data-model="courtyard">
+        <span class="tab-name">THE COURTYARD RESIDENCE</span>
+        <span class="tab-area">699.16 M²</span>
+      </button>
+      <button class="tab-btn" data-model="estate">
+        <span class="tab-name">THE ESTATE RESIDENCE</span>
+        <span class="tab-area">784.54 M²</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- PANEL MODELO -->
+  <section class="model-panel">
+    <div class="model-inner">
+      <h2 class="model-title reveal" id="modelTitle">GARDEN RESIDENCE</h2>
+      <div class="model-plan reveal d1">
+        <img id="modelPlan" src="planta-1.jpg" alt="Planta arquitectónica Garden Residence" />
+      </div>
+      <div class="model-specs reveal d2">
+        <ul class="specs-list" id="modelSpecs">
+          <li class="specs-area">Área Cerrada 353.39 – Área Semi Abierta 152.89 – Área Abierta 146.28</li>
+          <li>- 4 habitaciones, baños en suite (planta baja)</li>
+          <li>- Sala, comedor y cocina en doble altura - cocina abierta</li>
+          <li>- Terraza, piscina, deck, módulo para cocina exterior</li>
+          <li>- Den / sala de TV / Gazebo abierto</li>
+          <li>- Cuarto y baño de servicio - área de lavandería</li>
+          <li>- 2 estacionamientos techados - 2 frontales, depósito en garaje</li>
+          <li>- Patio de +- 800 m²</li>
+        </ul>
+        <span class="iso-badge">ISOMETRICO</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BANNER RIVIERA -->
+  <section class="riviera">
+    <h2 class="riviera-title reveal">Conoce la<br>Riviera Pacífica</h2>
+    <div class="riviera-line" aria-hidden="true"></div>
+    <a href="index.html" class="riviera-logo">
+      <img src="logo-cream.png" alt="SENDA" />
+    </a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-logo">
+      <img src="logo-cream.png" alt="SENDA" />
+    </div>
+    <div class="footer-links">
+      <a href="mailto:info@senda.com.pa">
+        Info@senda.com.pa
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      </a>
+      <a href="https://instagram.com/sendapa" target="_blank" rel="noopener">
+        @sendapa
+        <svg viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4c0 3.2-2.6 5.8-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8C2 4.6 4.6 2 7.8 2zm-.2 2C5.6 4 4 5.6 4 7.6v8.8C4 18.4 5.6 20 7.6 20h8.8c2 0 3.6-1.6 3.6-3.6V7.6C20 5.6 18.4 4 16.4 4H7.6zm9.65 1.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+      </a>
+    </div>
+  </footer>
+
+<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+<script>
+  // ===== Datos de los modelos =====
+  const MODELS = {
+    garden: {
+      title: 'GARDEN RESIDENCE',
+      plan: 'planta-1.jpg',
+      area: 'Área Cerrada 353.39 – Área Semi Abierta 152.89 – Área Abierta 146.28',
+      specs: [
+        '- 4 habitaciones, baños en suite (planta baja)',
+        '- Sala, comedor y cocina en doble altura - cocina abierta',
+        '- Terraza, piscina, deck, módulo para cocina exterior',
+        '- Den / sala de TV / Gazebo abierto',
+        '- Cuarto y baño de servicio - área de lavandería',
+        '- 2 estacionamientos techados - 2 frontales, depósito en garaje',
+        '- Patio de +- 800 m²'
+      ]
+    },
+    courtyard: {
+      title: 'COURTYARD RESIDENCE',
+      plan: 'planta-2.jpg',
+      area: 'Área Cerrada 376.22 – Área Semi Abierta 176.67 – Área Abierta 146.28',
+      specs: [
+        '- 4 habitaciones, baños en suite (3 en planta baja, 1 en planta alta)',
+        '- Sala, comedor y cocina en doble altura - cocina abierta',
+        '- Terraza, piscina, deck, módulo para cocina exterior',
+        '- Den / sala de TV / Gazebo abierto',
+        '- Cuarto y baño de servicio - área de lavandería',
+        '- 2 estacionamientos techados - 2 frontales, depósito en garaje',
+        '- Patio de +- 800 m²'
+      ]
+    },
+    estate: {
+      title: 'ESTATE RESIDENCE',
+      plan: 'planta-3.jpg',
+      area: 'Área Cerrada 461.60 – Área Semi Abierta 176.67 – Área Abierta 146.28',
+      specs: [
+        '- 6 habitaciones, baños en suite (3 en planta baja, 3 en planta alta)',
+        '- Sala, comedor y cocina en doble altura - cocina abierta',
+        '- Terraza, piscina, deck, módulo para cocina exterior',
+        '- Den / sala de TV / Gazebo abierto',
+        '- Cuarto y baño de servicio - área de lavandería',
+        '- 2 estacionamientos techados - 2 frontales, depósito en garaje',
+        '- Patio de +- 800 m²'
+      ]
+    }
+  };
+
+  // ===== Tabs =====
+  const title = document.getElementById('modelTitle');
+  const plan = document.getElementById('modelPlan');
+  const specsList = document.getElementById('modelSpecs');
+  const tabs = document.querySelectorAll('.tab-btn');
+
+  // Precargar plantas para cambio instantáneo
+  Object.values(MODELS).forEach(m => { const i = new Image(); i.src = m.plan; });
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const model = MODELS[tab.dataset.model];
+      if (!model) return;
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      title.classList.add('fading');
+      plan.classList.add('fading');
+      specsList.classList.add('fading');
+
+      setTimeout(() => {
+        title.textContent = model.title;
+        plan.src = model.plan;
+        plan.alt = 'Planta arquitectónica ' + model.title;
+        specsList.innerHTML = '<li class="specs-area">' + model.area + '</li>' +
+          model.specs.map(s => '<li>' + s + '</li>').join('');
+        title.classList.remove('fading');
+        plan.classList.remove('fading');
+        specsList.classList.remove('fading');
+      }, 420);
+    });
+  });
+
+  // ===== Smooth scroll =====
+  let lenis = null;
+  if (window.Lenis && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    lenis = new Lenis({ duration: 1.25, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+  }
+
+  // ===== Hero load =====
+  const heroImg = new Image();
+  heroImg.onload = () => document.getElementById('heroBg').classList.add('loaded');
+  heroImg.src = 'proyecto-hero.jpg';
+
+  // ===== Header =====
+  const header = document.getElementById('header');
+  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 70);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // ===== Reveals =====
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -70px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  document.querySelectorAll('.reveal').forEach(el => {
+    const r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight && r.bottom > 0) el.classList.add('visible');
+  });
+</script>
+
+</body>
+</html>

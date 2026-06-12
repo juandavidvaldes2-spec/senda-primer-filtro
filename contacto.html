@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contáctanos — SENDA Riviera Pacifica</title>
+<meta name="description" content="Connect with us. Déjanos tus datos y conoce más sobre Senda." />
+
+<link rel="preload" href="Archivo-Regular.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="Arimo-Bold.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="connect-hero.jpg" as="image">
+
+<style>
+  @font-face {
+    font-family: 'Archivo';
+    src: url('Archivo-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Archivo';
+    src: url('Archivo-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Arimo';
+    src: url('Arimo-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'BodoniSansText';
+    src: url('BodoniSansText-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-display: swap;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --cream: #f4f1ea;
+    --cream-form: #efe5d8;
+    --beige: #cbc2b0;
+    --dark: #211609;
+    --olive: #8a8452;
+    --olive-mid: #7c754c;
+    --olive-deep: #665e35;
+    --olive-darker: #3d3a1e;
+
+    --font-display: 'Archivo', system-ui, sans-serif;
+    --font-body: 'Arimo', system-ui, sans-serif;
+    --font-serif: 'BodoniSansText', Georgia, serif;
+  }
+
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--olive);
+    color: var(--dark);
+    line-height: 1.5;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(46px);
+    transition: opacity 1.3s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1.3s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal.d1 { transition-delay: 0.1s; }
+  .reveal.d2 { transition-delay: 0.2s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  }
+
+  /* ============ HEADER (oscuro sobre hero) ============ */
+  .header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 26px 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.5s ease, padding 0.5s ease, box-shadow 0.5s ease;
+    background: linear-gradient(180deg, rgba(33,22,9,0.75) 0%, rgba(33,22,9,0) 100%);
+  }
+
+  .header.scrolled {
+    background: rgba(33,22,9,0.96);
+    padding: 16px 64px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 30px rgba(0,0,0,0.25);
+  }
+
+  .header-logo { display: flex; align-items: center; }
+  .header-logo img { height: 27px; width: auto; }
+
+  .header-nav { display: flex; align-items: center; gap: 46px; }
+
+  .header-nav a {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2.4px;
+    color: var(--cream);
+    position: relative;
+  }
+
+  .header-nav a:not(.contact-btn)::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    bottom: -7px;
+    height: 1px;
+    background: var(--cream);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .header-nav a:not(.contact-btn):hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .contact-btn {
+    border: 1px solid rgba(244,241,234,0.9);
+    padding: 12px 26px;
+    border-radius: 999px;
+    transition: background 0.35s ease, color 0.35s ease;
+  }
+  .contact-btn:hover { background: var(--cream); color: var(--dark); }
+
+  /* ============ HERO ============ */
+  .hero {
+    position: relative;
+    height: 92vh;
+    min-height: 600px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 90px;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('connect-hero.jpg');
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.1);
+    opacity: 0;
+    transition: transform 6.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.5s ease;
+    will-change: transform;
+    filter: brightness(0.6);
+  }
+  .hero-bg.loaded { transform: scale(1.02); opacity: 1; }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(33,22,9,0.25);
+    pointer-events: none;
+  }
+
+  .hero-title {
+    position: relative;
+    z-index: 2;
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 64px;
+    letter-spacing: 10px;
+    line-height: 1.25;
+    color: var(--cream);
+    text-align: center;
+    opacity: 0;
+    transform: translateY(26px);
+    animation: heroIn 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+  }
+
+  .hero-sub {
+    position: relative;
+    z-index: 2;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 5px;
+    line-height: 2.4;
+    color: var(--cream);
+    text-align: center;
+    opacity: 0;
+    transform: translateY(26px);
+    animation: heroIn 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards;
+  }
+
+  @keyframes heroIn { to { opacity: 1; transform: translateY(0); } }
+
+  /* ============ CONNECT (form) ============ */
+  .connect {
+    background: var(--olive);
+    padding: 110px 64px 0;
+  }
+
+  .connect-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  .connect-title {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 40px;
+    letter-spacing: 5px;
+    color: var(--cream-form);
+    margin-bottom: 16px;
+  }
+
+  .connect-sub {
+    font-family: var(--font-display);
+    font-size: 15px;
+    color: var(--cream-form);
+    opacity: 0.92;
+    margin-bottom: 70px;
+    max-width: 560px;
+    line-height: 1.7;
+  }
+
+  .inquire {
+    background: var(--cream-form);
+    border-radius: 34px 34px 0 0;
+    padding: 70px 75px 64px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .inquire-watermark {
+    position: absolute;
+    bottom: 22px;
+    right: 70px;
+    width: 460px;
+    opacity: 0.14;
+    pointer-events: none;
+    user-select: none;
+  }
+  .inquire-watermark img { width: 100%; height: auto; }
+
+  .inquire-title {
+    font-family: var(--font-serif);
+    font-size: 40px;
+    font-weight: 400;
+    color: var(--olive-deep);
+    margin-bottom: 44px;
+  }
+
+  .inquire-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 26px 56px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .form-col { display: flex; flex-direction: column; gap: 24px; }
+
+  .field {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--olive-mid);
+    border-radius: 10px;
+    padding: 19px 24px;
+    font-family: var(--font-serif);
+    font-size: 17px;
+    color: var(--olive-darker);
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .field::placeholder { color: var(--olive-mid); opacity: 0.85; }
+
+  .field:focus {
+    border-color: var(--olive-deep);
+    box-shadow: 0 0 0 3px rgba(102, 94, 53, 0.12);
+  }
+
+  textarea.field { height: 100%; min-height: 230px; resize: none; }
+
+  .form-foot {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 8px;
+  }
+
+  .agent-label {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    color: var(--dark);
+    margin-bottom: 14px;
+  }
+
+  .agent-options { display: flex; gap: 40px; }
+
+  .radio {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    cursor: pointer;
+    font-family: var(--font-serif);
+    font-size: 17px;
+    color: var(--dark);
+  }
+
+  .radio input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+  .radio .dot {
+    width: 19px; height: 19px;
+    border-radius: 50%;
+    background: var(--olive-deep);
+    transition: box-shadow 0.25s ease;
+  }
+
+  .radio input:checked + .dot { box-shadow: inset 0 0 0 4px var(--cream-form), 0 0 0 1.5px var(--olive-deep); }
+
+  .btn-submit {
+    background: var(--olive);
+    color: var(--cream-form);
+    font-family: var(--font-serif);
+    font-size: 17px;
+    padding: 8px 52px;
+    border-radius: 7px;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  .btn-submit:hover { background: var(--olive-deep); transform: translateY(-2px); }
+
+  /* ============ FOOTER ============ */
+  .footer {
+    background: var(--olive-darker);
+    padding: 80px 64px 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-logo { display: flex; align-items: center; }
+  .footer-logo img { height: 36px; width: auto; }
+
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-end;
+  }
+
+  .footer-links a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-display);
+    font-size: 14.5px;
+    color: var(--cream);
+    transition: opacity 0.25s ease;
+  }
+  .footer-links a:hover { opacity: 0.7; }
+  .footer-links svg { width: 17px; height: 17px; fill: var(--cream); }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 960px) {
+    .header { padding: 18px 24px; }
+    .header.scrolled { padding: 12px 24px; }
+    .header-logo img { height: 18px; }
+    .header-nav { gap: 16px; }
+    .header-nav a { font-size: 10px; letter-spacing: 1.4px; }
+    .contact-btn { padding: 8px 14px; }
+
+    .hero { height: 70vh; min-height: 460px; gap: 50px; padding: 0 24px; }
+    .hero-title { font-size: 32px; letter-spacing: 5px; }
+    .hero-sub { font-size: 11.5px; letter-spacing: 2.6px; }
+
+    .connect { padding: 60px 20px 0; }
+    .connect-title { font-size: 26px; letter-spacing: 3px; }
+    .connect-sub { margin-bottom: 40px; }
+
+    .inquire { padding: 44px 28px; border-radius: 22px 22px 0 0; }
+    .inquire-title { font-size: 31px; }
+    .inquire-form { grid-template-columns: 1fr; gap: 22px; }
+    textarea.field { min-height: 150px; }
+    .form-foot { flex-direction: column; align-items: flex-start; gap: 30px; }
+    .inquire-watermark { width: 260px; right: 20px; bottom: 14px; }
+
+    .footer { flex-direction: column; gap: 34px; padding: 50px 24px; }
+    .footer-logo img { height: 26px; }
+    .footer-links { align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <a href="index.html" class="header-logo">
+      <img src="logo-cream.png" alt="SENDA" />
+    </a>
+    <nav class="header-nav">
+      <a href="index.html">UBICACIÓN</a>
+      <a href="proyecto.html">PROYECTO</a>
+      <a href="lifestyle.html">LIFESTYLE</a>
+      <a href="contacto.html" class="contact-btn">CONTACTANOS</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+    <h1 class="hero-title">CONNECT<br>WITH US</h1>
+    <div class="hero-sub">
+      THE LAND IS YOURS.<br>
+      WE'LL HELP YOU BUILD<br>
+      THE VISION.
+    </div>
+  </section>
+
+  <!-- CONNECT FORM -->
+  <section class="connect">
+    <div class="connect-inner">
+      <h2 class="connect-title reveal">CONNECT WITH US</h2>
+      <p class="connect-sub reveal d1">Déjanos tus datos y conoce más sobre Senda.</p>
+
+      <div class="inquire reveal d2">
+        <h3 class="inquire-title">Inquire</h3>
+
+        <form class="inquire-form" id="inquireForm">
+          <div class="form-col">
+            <input class="field" type="text" name="name" placeholder="Name" required />
+            <input class="field" type="tel" name="number" placeholder="Number" />
+            <input class="field" type="email" name="email" placeholder="Email" required />
+            <input class="field" type="text" name="country" placeholder="Country" />
+          </div>
+
+          <div class="form-col">
+            <textarea class="field" name="message" placeholder="Message"></textarea>
+          </div>
+
+          <div class="form-foot">
+            <div>
+              <div class="agent-label">Are you working with an agent?</div>
+              <div class="agent-options">
+                <label class="radio"><input type="radio" name="agent" value="yes" /><span class="dot"></span>yes</label>
+                <label class="radio"><input type="radio" name="agent" value="no" /><span class="dot"></span>no</label>
+              </div>
+            </div>
+            <button type="submit" class="btn-submit">Submit</button>
+          </div>
+        </form>
+
+        <div class="inquire-watermark"><img src="logo-olive.png" alt="" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-logo">
+      <img src="logo-cream.png" alt="SENDA" />
+    </div>
+    <div class="footer-links">
+      <a href="mailto:info@senda.com.pa">
+        Info@senda.com.pa
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      </a>
+      <a href="https://instagram.com/sendapa" target="_blank" rel="noopener">
+        @sendapa
+        <svg viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4c0 3.2-2.6 5.8-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8C2 4.6 4.6 2 7.8 2zm-.2 2C5.6 4 4 5.6 4 7.6v8.8C4 18.4 5.6 20 7.6 20h8.8c2 0 3.6-1.6 3.6-3.6V7.6C20 5.6 18.4 4 16.4 4H7.6zm9.65 1.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+      </a>
+    </div>
+  </footer>
+
+<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+<script>
+  let lenis = null;
+  if (window.Lenis && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    lenis = new Lenis({ duration: 1.25, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+  }
+
+  const heroImg = new Image();
+  heroImg.onload = () => document.getElementById('heroBg').classList.add('loaded');
+  heroImg.src = 'connect-hero.jpg';
+
+  const header = document.getElementById('header');
+  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 70);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -70px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  document.querySelectorAll('.reveal').forEach(el => {
+    const r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight && r.bottom > 0) el.classList.add('visible');
+  });
+
+  document.getElementById('inquireForm').addEventListener('submit', e => {
+    e.preventDefault();
+    alert('Thank you. Our team will be in touch shortly.');
+  });
+</script>
+
+</body>
+</html>
