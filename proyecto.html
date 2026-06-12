@@ -224,7 +224,7 @@
   /* ============ TABS MODELOS ============ */
   .models-tabs {
     background: var(--cream);
-    padding: 0 64px 100px;
+    padding: 0 64px 56px;
   }
 
   .tabs-row {
@@ -272,7 +272,7 @@
   /* ============ PANEL MODELO ============ */
   .model-panel {
     background: var(--cream-form);
-    padding: 100px 64px 90px;
+    padding: 56px 64px 64px;
   }
 
   .model-inner {
@@ -283,22 +283,25 @@
   .model-title {
     font-family: var(--font-body);
     font-weight: 700;
-    font-size: 34px;
+    font-size: 30px;
     letter-spacing: 3px;
     color: var(--dark);
-    margin-bottom: 50px;
+    margin-bottom: 26px;
     transition: opacity 0.4s ease;
   }
 
   .model-plan {
     position: relative;
-    margin-bottom: 60px;
-    min-height: 320px;
+    margin-bottom: 38px;
+    min-height: 240px;
+    text-align: center;
   }
 
   .model-plan img {
-    width: 100%;
-    height: auto;
+    max-height: 54vh;
+    width: auto;
+    max-width: 100%;
+    margin: 0 auto;
     transition: opacity 0.45s ease;
   }
 
@@ -589,6 +592,8 @@
   // Precargar plantas para cambio instantáneo
   Object.values(MODELS).forEach(m => { const i = new Image(); i.src = m.plan; });
 
+  const modelPanel = document.querySelector('.model-panel');
+
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       const model = MODELS[tab.dataset.model];
@@ -599,6 +604,10 @@
       title.classList.add('fading');
       plan.classList.add('fading');
       specsList.classList.add('fading');
+
+      // Llevar el panel a vista para ver el cambio sin scrollear a mano
+      if (lenis) lenis.scrollTo(modelPanel, { offset: -90, duration: 0.9 });
+      else modelPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
       setTimeout(() => {
         title.textContent = model.title;
