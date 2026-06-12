@@ -286,22 +286,34 @@
     font-size: 30px;
     letter-spacing: 3px;
     color: var(--dark);
-    margin-bottom: 26px;
+    margin-bottom: 14px;
     transition: opacity 0.4s ease;
   }
 
   .model-plan {
     position: relative;
-    margin-bottom: 38px;
+    margin-bottom: 18px;
     min-height: 240px;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    padding-left: 26px;
+  }
+
+  .model-plan::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 4%;
+    bottom: 10%;
+    width: 1px;
+    background: rgba(33,22,9,0.35);
   }
 
   .model-plan img {
-    max-height: 58vh;
+    max-height: 68vh;
     width: auto;
     max-width: 100%;
-    margin: 0 auto;
+    transform: translateX(2.5%);
     transition: opacity 0.45s ease;
   }
 
