@@ -307,36 +307,14 @@
     gap: 70px;
   }
 
-  .partner-operaa {
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: 30px;
-    letter-spacing: 9px;
-    color: var(--cream);
+  .partner-logo-operaa {
+    height: 32px;
+    width: auto;
   }
 
-  .partner-agency {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--cream);
-  }
-
-  .partner-agency .mark {
-    font-family: var(--font-display);
-    font-weight: 300;
-    font-size: 40px;
-    line-height: 1;
-  }
-
-  .partner-agency .lockup {
-    display: flex;
-    flex-direction: column;
-    font-family: var(--font-body);
-    font-weight: 700;
-    font-size: 15px;
-    letter-spacing: 1px;
-    line-height: 1.15;
+  .partner-logo-agency {
+    height: 78px;
+    width: auto;
   }
 
   /* ============ LEAF DECO ============ */
@@ -348,14 +326,11 @@
 
   .leaf-band img {
     position: absolute;
-    right: -40px;
-    top: -280px;
-    width: 400px;
-    height: 400px;
-    object-fit: cover;
-    border-radius: 46% 54% 58% 42% / 48% 44% 56% 52%;
-    transform: rotate(-8deg);
-    filter: drop-shadow(0 18px 40px rgba(0,0,0,0.35));
+    right: -130px;
+    top: -250px;
+    width: 490px;
+    height: auto;
+    filter: drop-shadow(0 18px 40px rgba(0,0,0,0.3));
     will-change: transform;
   }
 
@@ -698,9 +673,10 @@
     .rooted-title { font-size: 27px; }
     .rooted-title span { padding-left: 50px; }
     .partners-row { gap: 36px; flex-wrap: wrap; justify-content: center; }
-    .partner-operaa { font-size: 24px; letter-spacing: 6px; }
+    .partner-logo-operaa { height: 24px; }
+    .partner-logo-agency { height: 58px; }
 
-    .leaf-band img { width: 220px; height: 220px; top: -150px; right: -30px; }
+    .leaf-band img { width: 320px; top: -300px; right: -70px; }
 
     .residences { height: 64vh; min-height: 440px; }
     .btn-residences .inner { padding: 13px 26px; }
@@ -766,11 +742,8 @@
       <div class="partners reveal d1">
         <div class="partners-label">UN PROYECTO INTEGRADO DE</div>
         <div class="partners-row">
-          <div class="partner-operaa">OPERAA</div>
-          <div class="partner-agency">
-            <span class="mark">A</span>
-            <span class="lockup"><span>THE</span><span>AGENCY</span></span>
-          </div>
+          <img class="partner-logo-operaa" src="operaa-logo.png" alt="OPERAA" />
+          <img class="partner-logo-agency" src="agency-logo.png" alt="The Agency" />
         </div>
       </div>
     </div>
@@ -778,7 +751,7 @@
 
   <!-- HOJA TROPICAL -->
   <div class="leaf-band" aria-hidden="true">
-    <img src="tropical-leaf.jpg" alt="" data-parallax="-0.08" />
+    <img src="hoja-web.png" alt="" data-parallax="-0.08" />
   </div>
 
   <!-- SENDA RESIDENCES -->
@@ -899,7 +872,6 @@
       const progress = (box.top + box.height / 2 - vh / 2) / vh;
       let t = `translateY(${(progress * speed * vh * -1).toFixed(1)}px)`;
       if (el.classList.contains('banner-bg')) t += ' scale(1.08)';
-      if (el.closest('.leaf-band')) t += ' rotate(-8deg)';
       el.style.transform = t;
     });
     ticking = false;
